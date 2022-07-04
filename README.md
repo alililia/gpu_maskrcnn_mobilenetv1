@@ -100,20 +100,6 @@ pip install mmcv=0.2.14
 3. Execute train script.
     After dataset preparation, you can start training as follows:
 
-    ```bash
-
-    # distributed training
-    bash run_distribute_train.sh [RANK_TABLE_FILE] [DATA_PATH] [PRETRAINED_CKPT(optional)]
-    # example: bash run_distribute_train.sh ~/hccl_8p.json /home/DataSet/cocodataset/
-
-    # standalone training
-    bash run_standalone_train.sh [DATA_PATH] [PRETRAINED_CKPT(optional)]
-    # example: bash run_standalone_train.sh /home/DataSet/cocodataset/
-
-    On CPU:
-
-    # standalone training
-    bash run_standalone_train_cpu.sh [PRETRAINED_PATH](optional)
 
     On GPU:
 
@@ -130,12 +116,7 @@ pip install mmcv=0.2.14
 
     After training, you can start evaluation as follows:
 
-    ```bash
-    bash run_eval.sh [ANN_FILE] [CHECKPOINT_PATH] [DATA_PATH] [DEVICE_TARGET]
-
-    # Evaluation on CPU
-    bash run_eval_cpu.sh [ANN_FILE] [CHECKPOINT_PATH]
-
+   
     # Evaluation on GPU
     bash run_eval.sh [ANN_FILE] [CHECKPOINT_PATH] [DATA_PATH] [DEVICE_TARGET]
     ```
@@ -156,141 +137,7 @@ pip install mmcv=0.2.14
     1. MODEL_PATH is a model file, exported by export script file.
     2. ANN_FILE_PATH is a annotation file for inference.
 
-- Running on [ModelArts](https://support.huaweicloud.com/modelarts/)
-
-    ```bash
-    # (1) Perform a or b.
-    #       a. Set "enable_modelarts=True" on default_config.yaml file.
-    #          Set "distribute=True" on default_config.yaml file.
-    #          Set "need_modelarts_dataset_unzip=True" on default_config.yaml file.
-    #          Set "modelarts_dataset_unzip_name='cocodataset'" on default_config.yaml file.
-    #          Set "base_lr=0.02" on default_config.yaml file.
-    #          Set "mindrecord_dir='./MindRecord_COCO'" on default_config.yaml file.
-    #          Set "data_path='/cache/data'" on default_config.yaml file.
-    #          Set "ann_file='./annotations/instances_val2017.json'" on default_config.yaml file.
-    #          Set "epoch_size=12" on default_config.yaml file.
-    #          Set "ckpt_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on default_config.yaml file.
-    #          (optional)Set "checkpoint_url='s3://dir_to_your_pretrained/'" on default_config.yaml file.
-    #          Set other parameters on default_config.yaml file you need.
-    #       b. Add "enable_modelarts=True" on the website UI interface.
-    #          Add "need_modelarts_dataset_unzip=True" on the website UI interface.
-    #          Add "modelarts_dataset_unzip_name='cocodataset'" on the website UI interface.
-    #          Add "distribute=True" on the website UI interface.
-    #          Add "base_lr=0.02" on the website UI interface.
-    #          Add "mindrecord_dir='./MindRecord_COCO'" on the website UI interface.
-    #          Add "data_path='/cache/data'" on the website UI interface.
-    #          Add "ann_file='./annotations/instances_val2017.json'" on the website UI interface.
-    #          Add "epoch_size=12" on the website UI interface.
-    #          Set "ckpt_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on default_config.yaml file.
-    #          (optional)Add "checkpoint_url='s3://dir_to_your_pretrained/'" on the website UI interface.
-    #          Add other parameters on the website UI interface.
-    # (2) Prepare model code
-    # (3) Upload or copy your pretrained model to S3 bucket if you want to finetune.
-    # (4) Perform a or b. (suggested option a)
-    #       a. First, run "train.py" like the following to create MindRecord dataset locally from coco2017.
-    #             "python train.py --only_create_dataset=True --mindrecord_dir=$MINDRECORD_DIR --data_path=$DATA_PATH --ann_file=$ANNO_PATH"
-    #          Second, zip MindRecord dataset to one zip file.
-    #          Finally, Upload your zip dataset to S3 bucket.(you could also upload the origin mindrecord dataset, but it can be so slow.)
-    #       b. Upload the original coco dataset to S3 bucket.
-    #           (Data set conversion occurs during training process and costs a lot of time. it happens every time you train.)
-    # (5) Set the code directory to "/path/maskrcnn" on the website UI interface.
-    # (6) Set the startup file to "train.py" on the website UI interface.
-    # (7) Set the "Dataset path" and "Output file path" and "Job log path" to your path on the website UI interface.
-    # (8) Create your job.
-    #
-    # (1) Perform a or b.
-    #       a. Set "enable_modelarts=True" on default_config.yaml file.
-    #          Set "need_modelarts_dataset_unzip=True" on default_config.yaml file.
-    #          Set "modelarts_dataset_unzip_name='cocodataset'" on default_config.yaml file.
-    #          Set "mindrecord_dir='./MindRecord_COCO'" on default_config.yaml file.
-    #          Set "data_path='/cache/data'" on default_config.yaml file.
-    #          Set "ann_file='./annotations/instances_val2017.json'" on default_config.yaml file.
-    #          Set "epoch_size=12" on default_config.yaml file.
-    #          Set "ckpt_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on default_config.yaml file.
-    #          (optional)Set "checkpoint_url='s3://dir_to_your_pretrained/'" on default_config.yaml file.
-    #          Set other parameters on default_config.yaml file you need.
-    #       b. Add "enable_modelarts=True" on the website UI interface.
-    #          Add "need_modelarts_dataset_unzip=True" on the website UI interface.
-    #          Add "modelarts_dataset_unzip_name='cocodataset'" on the website UI interface.
-    #          Add "mindrecord_dir='./MindRecord_COCO'" on the website UI interface.
-    #          Add "data_path='/cache/data'" on the website UI interface.
-    #          Add "ann_file='./annotations/instances_val2017.json'" on the website UI interface.
-    #          Add "epoch_size=12" on the website UI interface.
-    #          Set "ckpt_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on default_config.yaml file.
-    #          (optional)Add "checkpoint_url='s3://dir_to_your_pretrained/'" on the website UI interface.
-    #          Add other parameters on the website UI interface.
-    # (2) Prepare model code
-    # (3) Upload or copy your pretrained model to S3 bucket if you want to finetune.
-    # (4) Perform a or b. (suggested option a)
-    #       a. First, run "train.py" like the following to create MindRecord dataset locally from coco2017.
-    #             "python train.py --only_create_dataset=True --mindrecord_dir=$MINDRECORD_DIR --data_path=$DATA_PATH --ann_file=$ANNO_PATH"
-    #          Second, zip MindRecord dataset to one zip file.
-    #          Finally, Upload your zip dataset to S3 bucket.(you could also upload the origin mindrecord dataset, but it can be so slow.)
-    #       b. Upload the original coco dataset to S3 bucket.
-    #           (Data set conversion occurs during training process and costs a lot of time. it happens every time you train.)
-    # (5) Set the code directory to "/path/maskrcnn" on the website UI interface.
-    # (6) Set the startup file to "train.py" on the website UI interface.
-    # (7) Set the "Dataset path" and "Output file path" and "Job log path" to your path on the website UI interface.
-    # (8) Create your job.
-    #
-    # (1) Perform a or b.
-    #       a. Set "enable_modelarts=True" on default_config.yaml file.
-    #          Set "need_modelarts_dataset_unzip=True" on default_config.yaml file.
-    #          Set "modelarts_dataset_unzip_name='cocodataset'" on default_config.yaml file.
-    #          Set "checkpoint_url='s3://dir_to_your_trained_model/'" on base_config.yaml file.
-    #          Set "checkpoint_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on default_config.yaml file.
-    #          Set "mindrecord_file='/cache/data/cocodataset/MindRecord_COCO'" on default_config.yaml file.
-    #          Set "data_path='/cache/data'" on default_config.yaml file.
-    #          Set "ann_file='./annotations/instances_val2017.json'" on default_config.yaml file.
-    #          Set other parameters on default_config.yaml file you need.
-    #       b. Add "enable_modelarts=True" on the website UI interface.
-    #          Add "need_modelarts_dataset_unzip=True" on the website UI interface.
-    #          Add "modelarts_dataset_unzip_name='cocodataset'" on the website UI interface.
-    #          Add "checkpoint_url='s3://dir_to_your_trained_model/'" on the website UI interface.
-    #          Add "checkpoint_path='./ckpt_maskrcnn/mask_rcnn-12_7393.ckpt'" on the website UI interface.
-    #          Set "mindrecord_file='/cache/data/cocodataset/MindRecord_COCO'" on default_config.yaml file.
-    #          Add "data_path='/cache/data'" on the website UI interface.
-    #          Set "ann_file='./annotations/instances_val2017.json'" on default_config.yaml file.
-    #          Add other parameters on the website UI interface.
-    # (2) Prepare model code
-    # (3) Upload or copy your trained model to S3 bucket.
-    # (4) Perform a or b. (suggested option a)
-    #       a. First, run "eval.py" like the following to create MindRecord dataset locally from coco2017.
-    #             "python eval.py --only_create_dataset=True --mindrecord_dir=$MINDRECORD_DIR --data_path=$DATA_PATH --ann_file=$ANNO_PATH \
-    #              --checkpoint_path=$CHECKPOINT_PATH"
-    #          Second, zip MindRecord dataset to one zip file.
-    #          Finally, Upload your zip dataset to S3 bucket.(you could also upload the origin mindrecord dataset, but it can be so slow.)
-    #       b. Upload the original coco dataset to S3 bucket.
-    #           (Data set conversion occurs during training process and costs a lot of time. it happens every time you train.)
-    # (5) Set the code directory to "/path/maskrcnn" on the website UI interface.
-    # (6) Set the startup file to "eval.py" on the website UI interface.
-    # (7) Set the "Dataset path" and "Output file path" and "Job log path" to your path on the website UI interface.
-    # (8) Create your job.
-    ```
-
-- Export on ModelArts (If you want to run in modelarts, please check the official documentation of [modelarts](https://support.huaweicloud.com/modelarts/), and you can start evaluating as follows)
-
-1. Export s8 multiscale and flip with voc val dataset on modelarts, evaluating steps are as follows:
-
-    ```python
-    # (1) Perform a or b.
-    #       a. Set "enable_modelarts=True" on base_config.yaml file.
-    #          Set "file_name='maskrcnn_mobilenetv1'" on base_config.yaml file.
-    #          Set "file_format='MINDIR'" on base_config.yaml file.
-    #          Set "checkpoint_url='/The path of checkpoint in S3/'" on beta_config.yaml file.
-    #          Set "ckpt_file='/cache/checkpoint_path/model.ckpt'" on base_config.yaml file.
-    #          Set other parameters on base_config.yaml file you need.
-    #       b. Add "enable_modelarts=True" on the website UI interface.
-    #          Add "file_name='maskrcnn_mobilenetv1'" on the website UI interface.
-    #          Add "file_format='MINDIR'" on the website UI interface.
-    #          Add "checkpoint_url='/The path of checkpoint in S3/'" on the website UI interface.
-    #          Add "ckpt_file='/cache/checkpoint_path/model.ckpt'" on the website UI interface.
-    #          Add other parameters on the website UI interface.
-    # (2) Upload or copy your trained model to S3 bucket.
-    # (3) Set the code directory to "/path/maskrcnn_mobilenetv1" on the website UI interface.
-    # (4) Set the startup file to "export.py" on the website UI interface.
-    # (5) Set the "Dataset path" and "Output file path" and "Job log path" to your path on the website UI interface.
-    # (6) Create your job.
+- 
     ```
 
 # [Script Description](#contents)
@@ -343,20 +190,7 @@ pip install mmcv=0.2.14
 
 ### [Training Script Parameters](#contents)
 
-```bash
 
-# distributed training
-Usage: bash run_distribute_train.sh [RANK_TABLE_FILE] [DATA_PATH] [PRETRAINED_CKPT(optional)]
-# example: bash run_distribute_train.sh ~/hccl_8p.json /home/DataSet/cocodataset/
-
-# standalone training
-Usage: bash run_standalone_train.sh [DATA_PATH] [PRETRAINED_CKPT(optional)]
-# example: bash run_standalone_train.sh /home/DataSet/cocodataset/
-
-On CPU:
-
-# standalone training
-Usage: bash run_standalone_train_cpu.sh [PRETRAINED_MODEL](optional)
 
 On GPU:
 
@@ -681,31 +515,23 @@ Accumulating evaluation results...
 
 ### Evaluation Performance
 
-| -------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| Model Version              | V1                                                          | V1                                                          |
-| uploaded Date              | 12/01/2020 (month/day/year)                                 | 09/21/2021 (month/day/year)                                 |
-| MindSpore Version          | 1.0.0                                                       | 1.5.0                                                       |
-| Dataset                    | COCO2017                                                    | COCO2017                                                    |
-| Training Parameters        | epoch=12,  batch_size = 2                                   | epoch=12,  batch_size = 2                                   |
-| Optimizer                  | Momentum                                                    | Momentum                                                         |
-| Loss Function              | Softmax Cross Entropy, Sigmoid Cross Entropy, SmoothL1Loss  | Softmax Cross Entropy, Sigmoid Cross Entropy, SmoothL1Loss  |
-| Output                     | Probability                                                 | Probability                                                 |
-| Loss                       | 0.88387                                                     | 0.60763                                                     |
-| Speed                      | 8pcs: 249 ms/step                                           | 8pcs: 795.645 ms/step                                       |
-| Total time                 | 8pcs: 6.23 hours                                            | 8pcs: 19.6 hours                                            |
-| Scripts                    | [maskrcnn script](https://gitee.com/mindspore/models/tree/master/official/cv/maskrcnn_mobilenetv1) |  [maskrcnn script](https://gitee.com/mindspore/models/tree/master/official/cv/maskrcnn_mobilenetv1) |
+| Parameters                 | GPU                                                         |
+| -------------------------- |  ----------------------------------------------------------- |
+| Model Version              |  V1                                                          |
+| Resource                   | GPU(Tesla V100-PCIE); CPU 2.60 GHz, 26 cores; Memory 790G; OS Euler2.0             |
+| uploaded Date              |  09/21/2021 (month/day/year)                                 |
+| MindSpore Version          | 1.5.0                                                       |
+| Dataset                    |  COCO2017                                                    |
+| Training Parameters        | epoch=12,  batch_size = 2                                   |
+| Optimizer                  |  Momentum                                                         |
+| Loss Function              |  Softmax Cross Entropy, Sigmoid Cross Entropy, SmoothL1Loss  |
+| Output                     |  Probability                                                 |
+| Loss                       |  0.60763                                                     |
+| Speed                      | 8pcs: 795.645 ms/step                                       |
+| Total time                 |  8pcs: 19.6 hours                                            |
+| Scripts                    |   [maskrcnn script](https://gitee.com/mindspore/models/tree/master/official/cv/maskrcnn_mobilenetv1) |
 
-### Inference Performance
-
-| ------------------- | --------------------------- |
-| Model Version       | V1                          |
-| Uploaded Date       | 12/01/2020 (month/day/year) |
-| MindSpore Version   | 1.0.0                       |
-| Dataset             | COCO2017                    |
-| batch_size          | 2                           |
-| outputs             | mAP                         |
-| Accuracy            | IoU=0.50:0.95 (BoundingBox 22.7%, Mask 17.6%) |
-| Model for inference | 107M (.ckpt file)           |
+         |
 
 # [Description of Random Situation](#contents)
 
