@@ -194,6 +194,7 @@ pip install mmcv=0.2.14
 
 On GPU:
 
+```
 # distributed training
 Usage: bash run_distribute_train_gpu.sh [DATA_PATH] [PRETRAINED_PATH] (optional)
 ```
@@ -358,6 +359,7 @@ bash run_standalone_train.sh [DATA_PATH] [PRETRAINED_CKPT(optional)]
 ```bash
 # standalone training
 bash run_standalone_train_cpu.sh [PRETRAINED_MODEL](optional)
+```
 ```
 
 ### [Distributed Training](#content)
@@ -531,7 +533,7 @@ Accumulating evaluation results...
 | Total time                 |  8pcs: 19.6 hours                                            |
 | Scripts                    |   [maskrcnn script](https://gitee.com/mindspore/models/tree/master/official/cv/maskrcnn_mobilenetv1) |
 
-         |
+   
 
 # [Description of Random Situation](#contents)
 
